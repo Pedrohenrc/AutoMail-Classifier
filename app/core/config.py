@@ -10,8 +10,8 @@ class Settings:
 
     @classmethod
     def validate(cls):
-        if not cls.OPENAI_API_KEY:
-            raise RuntimeError("OPENAI_API_KEY not configured")
+        if not cls.GEMINI_API_KEY:
+            raise RuntimeError("GEMINI_API_KEY not configured")
 
 
 settings = Settings()
