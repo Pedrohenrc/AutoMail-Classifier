@@ -1,0 +1,2 @@
+class AIUnavailableException(Exception):
+    pass
