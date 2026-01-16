@@ -2,8 +2,8 @@ from fastapi import APIRouter, Form, HTTPException
 from fastapi.responses import HTMLResponse
 from app.infrastructure.exceptions.ai_unavaliable_exception import AIUnavailableException
 from app.use_cases.analyze_email_use_case import AnalyzeEmailUseCase
-from app.infrastructure.ai.openai_classifier import OpenAIClassifier
-from app.infrastructure.ai.openai_response import OpenAIResponse
+from app.infrastructure.ai.gemini_classifier import GeminiClassifier
+from app.infrastructure.ai.gemini_response import GeminiResponse
 
 router = APIRouter()
 
@@ -26,8 +26,8 @@ def index():
 @router.post("/", response_class=HTMLResponse)
 def analyze_email(email_text: str = Form(...)):
     use_case = AnalyzeEmailUseCase(
-        classifier=OpenAIClassifier(),
-        responder=OpenAIResponse()
+        classifier=GeminiClassifier(),
+        responder=GeminiResponse()
     )
     try:
         result = use_case.execute(email_text)
