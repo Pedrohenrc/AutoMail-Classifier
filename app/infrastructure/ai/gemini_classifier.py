@@ -1,14 +1,15 @@
 import google.generativeai as genai
 from google.api_core import exceptions
-from app.interfaces.ai_classifier import AIClassifier
-from app.domain.classification import Classification
-from app.core.config import GEMINI_API_KEY, GEMINI_MODEL
+from app.ports.ai_classifier import AIClassifier
+from app.domain.value_objects.classification import Classification
+from app.core.config import settings
+
 
 class GeminiClassifier(AIClassifier):
 
     def __init__(self):
-        genai.configure(api_key=GEMINI_API_KEY)
-        self.model = genai.GenerativeModel(GEMINI_MODEL)
+        genai.configure(api_key=settings.GEMINI_API_KEY)
+        self.model = genai.GenerativeModel(settings.GEMINI_MODEL)
 
     def classify(self, email_text: str) -> Classification:
         try:
