@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from app.domain.entities.email import Email
 from app.domain.value_objects.classification import Classification
 from app.ports.ai_classifier import AIClassifier
-from app.ports.ai_response import AIResponder
+from app.ports.ai_response import AIResponse
 
 
 @dataclass
@@ -16,7 +16,7 @@ class AnalyzeEmailUseCase:
     def __init__(
         self,
         classifier: AIClassifier,
-        responder: AIResponder
+        responder: AIResponse
     ):
         self.classifier = classifier
         self.responder = responder

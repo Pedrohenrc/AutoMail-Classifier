@@ -3,7 +3,7 @@ from app.domain.entities.email import Email
 from app.domain.value_objects.classification import Classification
 
 
-class AIResponder(ABC):
+class AIResponse(ABC):
 
     @abstractmethod
     def generate_response(
