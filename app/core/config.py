@@ -1,24 +1,16 @@
-import os
-from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
-
-load_dotenv()
+from pydantic import Field
 
 
 class Settings(BaseSettings):
-    GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-    GEMINI_MODEL = "gemini-2.5-flash"
+    GEMINI_API_KEY: str = Field(..., description="Gemini API Key")
+    GEMINI_MODEL: str = "gemini-2.5-flash"
     PORT: int = 8000
 
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
-        
-    @classmethod
-    def validate(cls):
-        if not cls.GEMINI_API_KEY:
-            raise RuntimeError("GEMINI_API_KEY not configured")
+    model_config = {
+        "env_file": ".env",
+        "case_sensitive": True,
+    }
 
 
 settings = Settings()
-settings.validate()
