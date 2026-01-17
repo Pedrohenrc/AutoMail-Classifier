@@ -78,7 +78,7 @@ async def _extract_email_content(
         try:
             content = factory.read_file(
                 filename=email_file.filename,
-                file=email_file.file
+                file=await email_file.read()
             )
             return content
             
