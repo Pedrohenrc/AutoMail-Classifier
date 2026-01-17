@@ -17,7 +17,7 @@ class GeminiClassifier(AIClassifier):
                 "Você é um classificador de emails corporativos especializado em triagem de produtividade.\n"
                 "Sua tarefa é analisar o conteúdo do email e decidir se ele é 'produtivo' ou 'improdutivo'.\n\n"
                 "Definições:\n"
-                "- produtivo: Emails que contêm tarefas, decisões, solicitações de trabalho, feedback relevante ou informações cruciais.\n"
+                "- produtivo: Emails que contêm tarefas, decisões, solicitações de trabalho, feedback relevante ou informações cruciais (como curriculos e etc).\n"
                 "- improdutivo: SPAM, notificações automáticas irrelevantes, conversas paralelas sem objetivo de trabalho ou correntes.\n\n"
                 "Regras restritas:\n"
                 "1. Responda APENAS com uma das palavras: 'produtivo' ou 'improdutivo'.\n"
