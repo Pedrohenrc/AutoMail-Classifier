@@ -1,6 +1,5 @@
 from typing import BinaryIO
 from app.ports.file_reader.base_reader import BaseFileReader
-
 try:
     import PyPDF2
 except ImportError:
@@ -16,7 +15,6 @@ class PdfReader(BaseFileReader):
             )
     
     def can_read(self, filename: str) -> bool:
-        """Verifica se o arquivo é .pdf"""
         return filename.lower().endswith('.pdf')
     
     def read(self, file: BinaryIO) -> str:
