@@ -12,25 +12,25 @@ O sistema aceita emails em diferentes formatos e aplica um fluxo bem definido de
 
 O projeto segue os princípios da Clean Architecture, organizando o código em camadas bem definidas:
 
-**Controller** (Interface / Web)
+- **Controller** (Interface / Web)
 
-**Use Cases** (Regra de negócio)
+- **Use Cases** (Regra de negócio)
 
-**Ports** (Interfaces)
+- **Ports** (Interfaces)
 
-**Adapters** (Infraestrutura)
+- **Adapters** (Infraestrutura)
 
-**Domain** (Entidades e Value Objects)
+- **Domain** (Entidades e Value Objects)
 
 ### Benefícios:
 
-**Baixo** acoplamento
+- **Baixo** acoplamento
 
-**Independência** de frameworks
+- **Independência** de frameworks
 
-Facilidade de **testes**
+- Facilidade de **testes**
 
-**Substituição simples** de serviços externos (IA, leitores de arquivo, etc.)
+- **Substituição simples** de serviços externos (IA, leitores de arquivo, etc.)
 
 ## 🔄 Fluxo da Aplicação
 
