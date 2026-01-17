@@ -4,7 +4,7 @@ from pydantic import Field
 
 class Settings(BaseSettings):
     GEMINI_API_KEY: str = Field(..., description="Gemini API Key")
-    GEMINI_MODEL: str = "gemini-2.5-flash-lite"
+    GEMINI_MODEL: str = "gemini-3-flash"
     PORT: int = 8000
 
     model_config = {
