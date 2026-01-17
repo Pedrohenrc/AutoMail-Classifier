@@ -48,7 +48,9 @@ class GeminiResponse(AIResponse):
 
         if not response or not response.text:
             return self._get_fallback_response(classification)
-
+        
+        print(prompt)
+        print(response.text)
         return response.text.strip()
 
 

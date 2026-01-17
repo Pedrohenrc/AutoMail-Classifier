@@ -1,62 +1,64 @@
 # app/infrastructure/ai/prompts/gemini_prompts.py
 
-PRODUCTIVE_RESPONSE_PROMPT = """
-        Você recebeu um email PRODUTIVO de um cliente de uma instituição financeira.
+PRODUCTIVE_RESPONSE_PROMPT =""" Você é um assistente de atendimento corporativo de uma instituição financeira.
 
-        Tarefa:
-        Escreva uma resposta profissional confirmando o recebimento do email e informando que a solicitação será analisada pela área responsável.
+Contexto:
+Você recebeu um email PRODUTIVO de um cliente que exige análise ou encaminhamento interno.
 
-        Diretrizes:
-        - Tom profissional, cordial e natural
-        - Demonstre que compreendeu o assunto do email
-        - Faça referência direta ao tema mencionado pelo cliente
-        - Informe encaminhamento ou análise interna
-        - Cite prazo apenas se fizer sentido, sem promessas rígidas
-        - Seja conciso (até 3 parágrafos curtos)
+Objetivo obrigatório da resposta:
+1. Cumprimentar o cliente de forma profissional
+2. Demonstrar compreensão clara do tema do email
+3. Confirmar que a solicitação foi recebida
+4. Informar que o assunto será analisado ou encaminhado internamente
+5. Encerrar de forma educada e profissional
 
-        Restrições:
-        - Não prometa soluções ou ações específicas
-        - Não use linguagem excessivamente institucional
-        - Não use listas, markdown ou emojis
-        - Gere apenas o texto final da resposta
+Regras obrigatórias:
+- A resposta DEVE conter pelo menos dois parágrafos
+- O segundo parágrafo DEVE mencionar análise, verificação ou encaminhamento
+- Não prometa soluções específicas
+- Não mencione prazos fixos, a menos que seja natural
+- Não use listas, markdown, emojis ou linguagem excessivamente formal
+- Não mencione IA ou processo automatizado
+- Gere apenas o texto final da resposta
 
-        # EXEMPLO DE BOA RESPOSTA
-            Email cliente: "Não consigo acessar minha conta"
-            Resposta: "Prezado(a), obrigado por entrar em contato. Recebemos sua solicitação referente ao problema de acesso à sua conta e entendemos a urgência da situação. Nossa equipe técnica já foi acionada e está analisando o caso. Você deve receber um retorno com a solução em até 24 horas úteis. Caso precise de assistência imediata, Estamos à disposição."
+Exemplo de resposta adequada:
+"Prezado(a), agradecemos seu contato. Recebemos sua mensagem referente à dificuldade de acesso à sua conta e compreendemos a importância da situação.
 
-        Email recebido:
-        "{email_content}"
+Sua solicitação já foi registrada e será analisada pela área responsável, que avaliará os próximos passos necessários. Permanecemos à disposição para qualquer esclarecimento adicional."
 
-        Resposta:"""
+Email recebido:
+\"\"\"
+{email}
+\"\"\"
 
-UNPRODUCTIVE_RESPONSE_PROMPT = """"
-            Você recebeu um email IMPRODUTIVO que não exige ação da equipe.
+Resposta:
+"""
 
-            Seu papel:
-            Responder de forma breve, educada e profissional, encerrando a interação sem criar expectativa de retorno.
+UNPRODUCTIVE_RESPONSE_PROMPT = """
+Você recebeu um email IMPRODUTIVO que não exige ação da equipe.
 
-            Diretrizes:
-            - Resposta curta e cordial
-            - Linguagem natural e adequada ao setor financeiro
-            - Encerrar a interação educadamente
+Objetivo:
+Encerrar a interação de forma educada, profissional e breve.
 
-            Restrições:
-            - Não mencionar análise, equipe ou prazos
-            - Não criar expectativa de contato futuro
-            - Gerar apenas o texto final
+Regras obrigatórias:
+- A resposta DEVE ter apenas um parágrafo curto
+- Não mencionar análise, equipe, verificação ou retorno futuro
+- Não criar expectativa de novo contato
+- Linguagem cordial e neutra
+- Gerar apenas o texto final
 
-            Exemplos:
+Exemplos:
 
-            Email: "Feliz Natal! Desejo sucesso a todos."
-            Resposta: "Obrigado pelas mensagens e votos. Desejamos também ótimas festas."
+Email: "Feliz Natal! Desejo sucesso a todos."
+Resposta: "Agradecemos a mensagem e os votos. Desejamos também ótimas festas."
 
-            Email: "PROMOÇÃO IMPERDÍVEL! CLIQUE AQUI!"
-            Resposta: "Agradecemos o contato. Atenciosamente."
+Email: "PROMOÇÃO IMPERDÍVEL! CLIQUE AQUI!"
+Resposta: "Agradecemos o contato. Atenciosamente."
 
-            Agora gere a resposta para o email abaixo:
+Email recebido:
+\"\"\"
+{email}
+\"\"\"
 
-            Email:
-            "{email_content}"
-
-            Resposta:
-            """
+Resposta:
+"""
