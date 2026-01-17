@@ -30,16 +30,28 @@ class GeminiResponse(AIResponse):
         )
     def generate_response(self, email: Email, classification: Classification) -> str:
         prompt = GeminiPromptBuilder.build(email.content, classification)
-        temperature = 0.5 if classification == Classification.PRODUTIVO else 0.3
+
+        if classification == Classification.PRODUTIVO:
+            generation_config = genai.types.GenerationConfig(
+                temperature=0.6,
+                top_p=0.95,
+                top_k=40,
+                max_output_tokens=2048, 
+                candidate_count=1,
+            )
+        else:
+            generation_config = genai.types.GenerationConfig(
+                temperature=0.3,
+                top_p=0.90,
+                top_k=20,
+                max_output_tokens=512,
+                candidate_count=1,
+            )
 
         try:
             response = self.model.generate_content(
                 prompt,
-                generation_config=genai.types.GenerationConfig(
-                    temperature=temperature,
-                    top_p=0.95,
-                    max_output_tokens=300,
-                )
+                generation_config=generation_config,
             )
         except exceptions.ResourceExhausted:
             raise AIUnavailableException("Limite de cota do Gemini atingido.")
@@ -48,9 +60,7 @@ class GeminiResponse(AIResponse):
 
         if not response or not response.text:
             return self._get_fallback_response(classification)
-        
-        print(prompt)
-        print(response.text)
+    
         return response.text.strip()
 
 
