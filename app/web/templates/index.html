@@ -1,0 +1,547 @@
+{% extends "base.html" %}
+
+{% block extra_styles %}
+<style>
+    .upload-section {
+        margin-bottom: 2rem;
+    }
+
+    .tabs {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid var(--border-color);
+    }
+
+    .tab {
+        padding: 1rem 2rem;
+        background: transparent;
+        color: var(--text-secondary);
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .tab:hover {
+        color: var(--text-primary);
+    }
+
+    .tab.active {
+        color: var(--accent-primary);
+    }
+
+    .tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: var(--text-primary);
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    textarea {
+        width: 100%;
+        min-height: 250px;
+        padding: 1rem;
+        background: var(--bg-tertiary);
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        color: var(--text-primary);
+        font-family: 'Courier New', monospace;
+        font-size: 0.95rem;
+        resize: vertical;
+        transition: border-color 0.3s ease;
+    }
+
+    textarea:focus {
+        outline: none;
+        border-color: var(--accent-primary);
+    }
+
+    textarea::placeholder {
+        color: var(--text-secondary);
+    }
+
+    .file-upload {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem 2rem;
+        background: var(--bg-tertiary);
+        border: 2px dashed var(--border-color);
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .file-upload:hover {
+        border-color: var(--accent-primary);
+        background: rgba(59, 130, 246, 0.05);
+    }
+
+    .file-upload input[type="file"] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .file-upload-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    .file-upload-text {
+        color: var(--text-secondary);
+        text-align: center;
+    }
+
+    .file-upload-text strong {
+        color: var(--accent-primary);
+    }
+
+    .file-name {
+        margin-top: 1rem;
+        padding: 0.75rem 1rem;
+        background: var(--bg-secondary);
+        border-radius: 6px;
+        color: var(--success);
+        font-weight: 600;
+        display: none;
+    }
+
+    .file-name.show {
+        display: block;
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .loading {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .loading.show {
+        display: block;
+    }
+
+    .spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--border-color);
+        border-top-color: var(--accent-primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .info-card {
+        background: var(--bg-tertiary);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--accent-primary);
+    }
+
+    .info-card h3 {
+        color: var(--accent-primary);
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .info-card p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+    }
+
+    /* RESULTADO - inicialmente escondido */
+    .result-section {
+        display: none;
+        margin-top: 3rem;
+        animation: slideDown 0.4s ease-out;
+    }
+
+    .result-section.show {
+        display: block;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .result-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+    }
+
+    .result-header h2 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        color: var(--success);
+    }
+
+    .result-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .result-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px var(--shadow);
+    }
+
+    .result-card h3 {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        font-size: 1.3rem;
+        color: var(--text-primary);
+    }
+
+    .classification-section {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+    }
+
+    .classification-icon {
+        font-size: 3rem;
+    }
+
+    .classification-details h4 {
+        font-size: 1rem;
+        color: var(--text-secondary);
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .response-text {
+        background: var(--bg-tertiary);
+        padding: 1.5rem;
+        border-radius: 8px;
+        border-left: 4px solid var(--accent-primary);
+        color: var(--text-primary);
+        line-height: 1.8;
+        white-space: pre-wrap;
+        font-size: 1rem;
+    }
+
+    .copy-btn {
+        margin-top: 1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        color: var(--text-primary);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .copy-btn:hover {
+        background: var(--bg-secondary);
+        border-color: var(--accent-primary);
+    }
+
+    .copy-btn.copied {
+        background: rgba(16, 185, 129, 0.2);
+        border-color: var(--success);
+        color: var(--success);
+    }
+
+    @media (min-width: 1024px) {
+        .result-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="info-grid">
+    <div class="info-card">
+        <h3>🎯 Produtivo</h3>
+        <p>Emails que requerem ação: suporte técnico, solicitações, feedbacks relevantes</p>
+    </div>
+    <div class="info-card">
+        <h3>🚫 Improdutivo</h3>
+        <p>SPAM, notificações irrelevantes, conversas sem objetivo de trabalho</p>
+    </div>
+    <div class="info-card">
+        <h3>🤖 IA Generativa</h3>
+        <p>Respostas automáticas inteligentes geradas pelo Google Gemini</p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="tabs">
+        <button class="tab active" data-tab="text">✍️ Inserir Texto</button>
+        <button class="tab" data-tab="file">📎 Upload de Arquivo</button>
+    </div>
+
+    <form id="emailForm">
+        <div class="tab-content active" data-content="text">
+            <div class="form-group">
+                <label for="email_text">Conteúdo do Email</label>
+                <textarea 
+                    name="email_text" 
+                    id="email_text" 
+                    placeholder="Cole aqui o conteúdo do email para análise...&#10;&#10;Exemplo:&#10;Assunto: Solicitação de Suporte&#10;Prezados, preciso de ajuda com o sistema..."
+                ></textarea>
+            </div>
+        </div>
+
+        <div class="tab-content" data-content="file">
+            <div class="form-group">
+                <label for="email_file">Arquivo de Email (.txt ou .pdf)</label>
+                <div class="file-upload">
+                    <input 
+                        type="file" 
+                        name="email_file" 
+                        id="email_file" 
+                        accept=".txt,.pdf"
+                    >
+                    <div class="file-upload-icon">📄</div>
+                    <div class="file-upload-text">
+                        <strong>Clique para selecionar</strong> ou arraste o arquivo aqui
+                        <br>
+                        <small>Formatos aceitos: .txt, .pdf</small>
+                    </div>
+                </div>
+                <div class="file-name" id="fileName"></div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit" class="btn btn-primary">🚀 Analisar Email</button>
+            <button type="button" class="btn btn-secondary" onclick="resetForm()">🔄 Limpar</button>
+        </div>
+    </form>
+
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">Analisando com IA...</p>
+    </div>
+</div>
+
+<div class="result-section" id="resultSection">
+    <div class="result-header">
+        <h2>✅ Análise Concluída</h2>
+        <p class="subtitle">Confira os resultados abaixo</p>
+    </div>
+
+    <div class="result-grid">
+        <div class="result-card">
+            <h3>🎯 Classificação</h3>
+            <div class="classification-section">
+                <div class="classification-icon" id="classificationIcon"></div>
+                <div class="classification-details">
+                    <h4>Categoria</h4>
+                    <span class="badge" id="classificationBadge"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-card">
+            <h3>🤖 Resposta Sugerida pela IA</h3>
+            <div class="response-text" id="responseText"></div>
+            <button class="copy-btn" onclick="copyResponse()" id="copyBtn">
+                📋 Copiar Resposta
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const targetTab = tab.dataset.tab;
+            
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            tab.classList.add('active');
+            document.querySelector(`[data-content="${targetTab}"]`).classList.add('active');
+            
+            if (targetTab === 'text') {
+                document.getElementById('email_file').value = '';
+                document.getElementById('fileName').classList.remove('show');
+            } else {
+                document.getElementById('email_text').value = '';
+            }
+        });
+    });
+
+    document.getElementById('email_file').addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name;
+        const fileNameDiv = document.getElementById('fileName');
+        
+        if (fileName) {
+            fileNameDiv.textContent = `✓ ${fileName}`;
+            fileNameDiv.classList.add('show');
+        } else {
+            fileNameDiv.classList.remove('show');
+        }
+    });
+
+    document.getElementById('emailForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const loadingDiv = document.getElementById('loading');
+        const resultSection = document.getElementById('resultSection');
+        
+        loadingDiv.classList.add('show');
+        resultSection.classList.remove('show');
+        
+        const formData = new FormData();
+        const emailText = document.getElementById('email_text').value;
+        const emailFile = document.getElementById('email_file').files[0];
+        
+        if (emailFile) {
+            formData.append('email_file', emailFile);
+        } else if (emailText) {
+            formData.append('email_text', emailText);
+        } else {
+            alert('Por favor, forneça um email para análise.');
+            loadingDiv.classList.remove('show');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.detail || 'Erro ao analisar email');
+            }
+            
+            const result = await response.json();
+            
+            displayResult(result);
+            
+        } catch (error) {
+            alert(`Erro: ${error.message}`);
+        } finally {
+            loadingDiv.classList.remove('show');
+        }
+    });
+
+    function displayResult(result) {
+        const resultSection = document.getElementById('resultSection');
+        const classificationIcon = document.getElementById('classificationIcon');
+        const classificationBadge = document.getElementById('classificationBadge');
+        const responseText = document.getElementById('responseText');
+        
+        if (result.classification === 'produtivo') {
+            classificationIcon.textContent = '✅';
+            classificationBadge.className = 'badge badge-produtivo';
+            classificationBadge.textContent = 'PRODUTIVO';
+        } else {
+            classificationIcon.textContent = '🚫';
+            classificationBadge.className = 'badge badge-improdutivo';
+            classificationBadge.textContent = 'IMPRODUTIVO';
+        }
+        
+        responseText.textContent = result.suggested_response;
+        
+        resultSection.classList.add('show');
+        
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function copyResponse() {
+        const responseText = document.getElementById('responseText').textContent;
+        const copyBtn = document.getElementById('copyBtn');
+        
+        navigator.clipboard.writeText(responseText).then(() => {
+            copyBtn.classList.add('copied');
+            copyBtn.innerHTML = '✓ Copiado!';
+            
+            setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtn.innerHTML = '📋 Copiar Resposta';
+            }, 2000);
+        }).catch(err => {
+            console.error('Erro ao copiar:', err);
+            alert('Erro ao copiar texto');
+        });
+    }
+
+    function resetForm() {
+        document.getElementById('emailForm').reset();
+        document.getElementById('fileName').classList.remove('show');
+        document.getElementById('resultSection').classList.remove('show');
+    }
+</script>
+{% endblock %}

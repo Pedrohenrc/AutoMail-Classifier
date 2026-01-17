@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="text-align: center; max-width: 600px; margin: 0 auto;">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">⚠️</div>
+    
+    <h2 style="color: var(--danger); margin-bottom: 1rem;">Ops! Algo deu errado</h2>
+    
+    <div class="alert alert-error">
+        <span style="font-size: 1.5rem;">⚠</span>
+        <p>{{ error_message }}</p>
+    </div>
+    
+    <div style="margin-top: 2rem;">
+        <a href="/" class="btn btn-primary">🏠 Voltar ao Início</a>
+    </div>
+    
+    {% if error_details %}
+    <details style="margin-top: 2rem; text-align: left;">
+        <summary style="cursor: pointer; color: var(--text-secondary);">
+            Detalhes técnicos
+        </summary>
+        <pre style="margin-top: 1rem; padding: 1rem; background: var(--bg-tertiary); border-radius: 6px; color: var(--text-secondary); font-size: 0.85rem; overflow-x: auto;">{{ error_details }}</pre>
+    </details>
+    {% endif %}
+</div>
+{% endblock %}
